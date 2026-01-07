@@ -3,8 +3,14 @@ function crearTablaContactos()
 {
      let tabla = document.getElementById('tablaContactos');
      if (tabla) tabla.remove(); 
-    google.script.run.withSuccessHandler(
-    function(obj)
+    google.script.run
+    .withSuccessHandler(crearTablaContactosCorrectamente)
+    .withFailureHandler(crearTablaContactosError)
+    .obtenerContactos();
+}
+
+ 
+function crearTablaContactosCorrectamente(obj)
     {
         
 
@@ -45,9 +51,42 @@ function crearTablaContactos()
          tabla.classList.add('table','table-striped','border','border-3', 'table-success');
          //agregamos tabla a la pagina
          document.getElementById('divContactos').appendChild(tabla);
-    }
-).obtenerContactos();
-}
 
-    
+         //mostrat notificacion de ok
+
+         crearNotificacion(1,'Contactos obtenidos correctamente','Todo en orden');
+    } 
+
+    function crearTablaContactosError()
+    {
+      //Mostrar notifacion de error
+
+    }
+
+    function crearNotificacion(tipo, mensaje, titulo)
+    {
+      //obtener datos
+      let mensajeNotificacion = document.getElementById('mensajeNotificacion');
+      let tituloNotificacion = document.getElementById('tituloNotificacion');
+      let elementoNotificacion = document.getElementById('notificacion');
+      let iconoNotificacion = document.getElementById('icono-notificacion');
+      let notificacion = bootstrap.Toast.getOrCreateInstance(elementoNotificacion);
+
+      // Editar la notificacion
+       iconoNotificacion.className = '';
+       iconoNotificacion.classList.add('bi','bi-check2-square');
+       mensajeNotificacion.textContent = mensaje;
+       tituloNotificacion.textContent = titulo;
+       elementoNotificacion.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--color-verde-oscuro:');
+
+
+      // Mostrar Notificacion
+      notificacion.show();
+
+
+
+
+
+    }
+
 </script>
